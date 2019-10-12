@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Калькулятор</title>
+	<style>
+		body {
+			user-select: none;
+			background-color: #8CFFD8;
+			padding: 0;
+			margin: 0;
+		}
+		.container {
+			width: 320px;
+			border: 2px solid #000;
+			display: flex;
+			flex-wrap: wrap;
+			margin: auto;
+			box-sizing: border-box;
+		}
+
+		input {
+			width: 100%;
+			height: 80px;
+			border: none;
+			outline: none;
+			background-color: #F4F4F4;
+			padding: 15px;
+			box-sizing: border-box;
+			font-size: 24px;
+			text-align: right;
+		}
+		.form {
+			width: 100%;
+		}
+		.item {
+			width: 25%;
+			height: 65px;
+			background-color: #fff;
+			box-sizing: border-box;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-right: 1px solid #BFBFBF;
+			border-top: 1px solid #BFBFBF;
+			font-size: 24px;
+			color: #433F3F;
+			cursor: pointer;
+		}
+		.back, 
+		.item:nth-child(8), 
+		.item:nth-child(12), 
+		.item:nth-child(16),
+		.item:nth-child(20),
+		.equal {
+			border-right: none;
+		}
+		.item:active {
+			background-color: #E8E8E8;
+		}
+		.clear {
+			width: 50%;
+			color: #FF6E27;
+
+		}
+		.back,
+		.zero {
+			width: 50%;	
+
+		}
+		.equal {
+			background-color: #FF6E27;
+			color: #fff;
+			font-weight: bold;
+		}
+		.equal:active {
+			background-color: #FB590A;
+		}
+		.history {
+			width: 100%;
+			height: 80px;
+			padding: 15px;
+			padding-top: 39px;
+			background-color: #F4F4F4;
+			box-sizing: border-box;
+			font-size: 24px;
+			text-align: right;
+		}
+		.history p {
+			cursor: pointer;
+			display: inline;
+		}
+
+		@media screen and (max-width: 500px) {
+			.container {
+				width: 100%;
+			}
+		}
+			
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="history"><p></p></div>
+		<div class="form">
+			<form name="form">
+				<input type="text" name="field" readonly="">
+			</form>
+		</div>
+		<div class="item clear">AC</div>
+		<div class="item back">&larr;</div>
+		<div class="item" data-value='+'>+</div>
+		<div class="item" data-value='-'>-</div>
+		<div class="item" data-value='*'>&times;</div>
+		<div class="item" data-value='/'>&divide;</div>
+		<div class="item" data-value='7'>7</div>
+		<div class="item" data-value='8'>8</div>
+		<div class="item" data-value='9'>9</div>
+		<div class="item" data-value='('>(</div>
+		<div class="item"data-value='4'>4</div>
+		<div class="item" data-value='5'>5</div>
+		<div class="item" data-value='6'>6</div>
+		<div class="item" data-value=')'>)</div>
+		<div class="item one" data-value='1'>1</div>
+		<div class="item two" data-value='2'>2</div>
+		<div class="item thre" data-value='3'>3</div>
+		<div class="item" data-value='3.14'>&pi;</div>
+		<div class="item zero" data-value='0'>0</div>
+		<div class="item" data-value='.'>.</div>
+		<div class="item equal">=</div>
+	</div>
+	<script>
+		document.querySelector('.container').onclick = function (event) {
+			let target = event.target;
+			let value = target.dataset.value;
+
+			if (!value) return;
+
+
+			let fieldValue = document.forms.form.field.value;
+			let lastSymbol = fieldValue.slice(fieldValue.length - 1);
+
+			if (fieldValue.includes('=')) {
+				document.forms.form.field.value = fieldValue.slice(fieldValue.indexOf('=') + 1);
+				document.querySelector('.history p').innerHTML = fieldValue;
+				document.querySelector('.history').style.borderBottom = '1px dashed #6A6A6A';
+		
+			}
+
+			if (fieldValue.length > 20) {
+				alert('Максимально количество символов: 20');
+				return;
+			}
+
+			if (fieldValue.slice(fieldValue.length - 2) == '--' && value == '-') return;
+
+			if (value == '3.14') {
+				
+				if (fieldValue.slice(fieldValue.length - 4) == '3.14') return;
+			}
+
+			if (value == '+' && lastSymbol == '+' ||value == '+' && lastSymbol == '*' || value == '+' && lastSymbol == '/' || value == '+' && lastSymbol == '.' || value == '+' && lastSymbol == '-' || value == '-' && lastSymbol == '+' ||value == '-' && lastSymbol == '*' || value == '-' && lastSymbol == '/' || value == '-' && lastSymbol == '.' || value == '*' && lastSymbol == '+' ||value == '*' && lastSymbol == '*' || value == '*' && lastSymbol == '/' || value == '*' && lastSymbol == '.' || value == '*' && lastSymbol == '-' || value == '/' && lastSymbol == '+' ||value == '/' && lastSymbol == '*' || value == '/' && lastSymbol == '/' || value == '/' && lastSymbol == '.' || value == '/' && lastSymbol == '-' || value == '.' && lastSymbol == '+' ||value == '.' && lastSymbol == '*' || value == '.' && lastSymbol == '/' || value == '.' && lastSymbol == '.' || value == '.' && lastSymbol == '-') {
+				document.forms.form.field.value = fieldValue.slice(0, fieldValue.length - 1) + value;
+				
+			} else {
+				document.forms.form.field.value += value;
+			}
+			
+		}
+
+		document.querySelector('.clear').onclick = function () {
+			
+			if (document.forms.form.field.value == '') {
+				document.querySelector('.history p').innerHTML = '';
+				document.querySelector('.history').style.borderBottom = 'none';
+			} else {
+				document.forms.form.field.value = '';
+			}			
+		}
+
+		document.querySelector('.back').onclick = function () {
+			let value = document.forms.form.field.value;
+			document.forms.form.field.value = value.slice(0, value.length - 1);
+		}
+
+		document.querySelector('.equal').onclick = function() {
+			let value = document.forms.form.field.value;
+			if (!value) return;
+			let i = value.indexOf('--', 0);
+
+			if (i != -1) {
+				value = value.slice(0, i) + '+' + value.slice(i+2);
+			}
+
+			document.forms.form.field.value += '=' + eval(value);
+		}
+		document.querySelector('.history').firstElementChild.onclick = function () {
+			document.forms.form.field.value = document.querySelector('.history p').innerHTML;
+		}
+
+	</script>
+</body>
+</html>
